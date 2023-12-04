@@ -6,6 +6,8 @@ package main
 import (
 	"flag"
 	"os"
+	"sigs.k8s.io/application/controllers/monitoring"
+	"sigs.k8s.io/controller-runtime/pkg/metrics"
 	"time"
 
 	"k8s.io/apimachinery/pkg/runtime"
@@ -59,6 +61,12 @@ func main() {
 		setupLog.Error(err, "unable to start kube-app-manager")
 		os.Exit(1)
 	}
+
+	exp, err := monitoring.NewAppExporter(monitoring.Options{
+		Log:    ctrl.Log.WithName("controllers").WithName("AppExporter"),
+		Client: mgr.GetClient(),
+	})
+	metrics.Registry.MustRegister(exp)
 
 	if err = (&controllers.ApplicationReconciler{
 		Client: mgr.GetClient(),
