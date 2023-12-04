@@ -1,0 +1,1 @@
+docker buildx build --file=Dockerfile -t zhizuqiu/application:v2.0.1 --platform=linux/arm64,linux/amd64,linux/ppc64le . --push

@@ -8,11 +8,13 @@ kind: ServiceMonitor
 metadata:
   labels:
     control-plane: controller-manager
-  name: metrics-monitor
+  name: app-metrics-monitor
   namespace: system
 spec:
   endpoints:
     - path: /metrics
       port: https
   selector:
-    control-plane: controller-manager
+    matchLabels:
+      app.kubernetes.io/name: kube-app-manager
+      control-plane: controller-manager
